@@ -1,21 +1,21 @@
-
+import datetime
+import locale
+import csv
 from pathlib import Path
 from PIL import Image, ImageFont, ImageDraw
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+#BASE_DIR = Path(__file__).resolve().parent.parent
 
-texto = "ABCKCKCKSALÑFÑASFÑALSJFÑLAJSFÑASFJFSÑA"
-
-def img_precio():
+def card(fecha_format):
     
   # Abrir imagen en la ruta
   img = Image.open('tarjeta.png')
-  
+
 
   draw = ImageDraw.Draw(img)
   font = ImageFont.truetype('Mitr-Medium.ttf', size=30, encoding='unic')
 
-  text = texto
+  text = fecha_format
 
   xcenter = img.width/2 
   ycenter = img.height/2
@@ -30,4 +30,16 @@ def img_precio():
 
   img.save('tarjeta2.png')
 
-img_precio()
+locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+time_data = datetime.datetime.now()
+data_format = time_data.strftime("%d/%m/%Y")
+
+date_birthday = time_data.strftime("Buenos Aires, %d de %B del %Y")
+
+with open('fechas.csv') as csvfile:
+  reader = csv.DictReader(csvfile)
+  for row in reader:
+    if row['fecha'] == data_format:
+      print(row['nombre'], row['fecha'])
+      card(date_birthday)
+            
